@@ -1,4 +1,4 @@
-;(() => {
+(() => {
   const matches = document.querySelectorAll(".csgo_scoreboard_inner_right")
 
   const playerStats = {}
