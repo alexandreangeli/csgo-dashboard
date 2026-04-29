@@ -6,21 +6,32 @@ type TabNavigationProps = {
 }
 
 export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
-  const tabs: TabType[] = ["Balanceador", "Ranking", "Partidas"]
+  const tabs: Array<{ name: TabType; icon: string }> = [
+    { name: "Balanceador", icon: "⚖️" },
+    { name: "Ranking", icon: "🏆" },
+    { name: "Partidas", icon: "📋" },
+  ]
 
   return (
     <div className="flex gap-2 mb-6">
-      {tabs.map((t) => (
+      {tabs.map(({ name, icon }) => (
         <button
-          key={t}
-          onClick={() => onTabChange(t)}
-          className={`px-4 py-2 rounded-md text-sm font-medium border ${
-            activeTab === t
-              ? "bg-orange-600 text-white dark:bg-orange-400 dark:text-black"
-              : "bg-transparent"
+          key={name}
+          onClick={() => onTabChange(name)}
+          className={`px-4 py-2 rounded-md text-sm font-medium border transition-all ${
+            activeTab === name
+              ? "bg-orange-600 text-white dark:bg-orange-500 dark:text-white shadow-md"
+              : "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800"
           }`}
         >
-          {t}
+          <span
+            className={`mr-1 text-lg ${
+              activeTab === name ? "drop-shadow-lg" : ""
+            }`}
+          >
+            {icon}
+          </span>
+          {name}
         </button>
       ))}
     </div>

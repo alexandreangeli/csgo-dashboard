@@ -35,8 +35,42 @@ export function MatchesList({ matches }: MatchesListProps) {
           <article key={match.matchTime} className="p-4">
             <div className="flex justify-between mb-3">
               <strong>{formatLocalTime(match.matchTime)}</strong>
-              <div>
-                {match.scoreA}:{match.scoreB}
+              <div className="flex gap-2 items-center">
+                {(() => {
+                  const scoreANum = parseInt(match.scoreA)
+                  const scoreBNum = parseInt(match.scoreB)
+                  const isAWinner = scoreANum > scoreBNum
+                  const isBWinner = scoreBNum > scoreANum
+                  const isDraw = scoreANum === scoreBNum
+
+                  return (
+                    <div className="flex gap-1 font-bold text-lg">
+                      <span
+                        className={`${
+                          isAWinner
+                            ? "text-green-600"
+                            : isBWinner
+                              ? "text-red-600"
+                              : "text-gray-600"
+                        }`}
+                      >
+                        {match.scoreA}
+                      </span>
+                      <span className="text-gray-400">:</span>
+                      <span
+                        className={`${
+                          isBWinner
+                            ? "text-green-600"
+                            : isAWinner
+                              ? "text-red-600"
+                              : "text-gray-600"
+                        }`}
+                      >
+                        {match.scoreB}
+                      </span>
+                    </div>
+                  )
+                })()}
               </div>
             </div>
 
