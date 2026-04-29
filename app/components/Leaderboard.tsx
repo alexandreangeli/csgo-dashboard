@@ -18,7 +18,7 @@ export function Leaderboard({ players }: LeaderboardProps) {
               <th className="px-4 py-2 text-left">Nome</th>
               <th className="px-4 py-2 text-right">Rating</th>
               <th className="px-4 py-2 text-right">Partidas</th>
-              <th className="px-4 py-2 text-right">Taxa de Vitória</th>
+              <th className="px-4 py-2 text-right">Win Rate</th>
               <th className="px-4 py-2 text-right">K/D</th>
             </tr>
           </thead>
