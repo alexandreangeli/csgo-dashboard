@@ -34,7 +34,7 @@ export default function DashboardClient({ rows }: { rows: Row[] }) {
   const [selected, setSelected] = useState<string[]>([])
 
   // DEFAULT = KD
-  const [mode, setMode] = useState<"kd" | "score">("kd")
+  const [mode, setMode] = useState<"kd">("kd")
 
   const players = buildPlayers(rows, mode)
   const matches = groupMatches(rows)
