@@ -37,7 +37,7 @@ export default function DashboardClient({ rows }: { rows: Row[] }) {
   const [selected, setSelected] = useState<string[]>([])
 
   // DEFAULT = SCORE
-  const [mode, setMode] = useState<"kd" | "score">("score")
+  const [mode, setMode] = useState<"kd" | "score">("kd")
 
   const players = buildPlayers(rows, mode)
   const matches = groupMatches(rows)
@@ -269,14 +269,24 @@ function groupMatches(rows: Row[]) {
   return Object.values(map)
 }
 
+function normalizeName(name: string) {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "")
+}
+
 function buildPlayers(rows: Row[], mode: "kd" | "score") {
   const map: Record<string, any> = {}
 
   rows.forEach((r) => {
-    if (!map[r.profile]) {
-      map[r.profile] = {
+    const playerId = normalizeName(r.name)
+
+    if (!map[playerId]) {
+      map[playerId] = {
         name: r.name,
-        profile: r.profile,
+        profile: playerId, // IMPORTANT: unified ID
         wins: 0,
         losses: 0,
         totalKills: 0,
@@ -286,7 +296,7 @@ function buildPlayers(rows: Row[], mode: "kd" | "score") {
       }
     }
 
-    const p = map[r.profile]
+    const p = map[playerId]
 
     if (Number(r.win)) p.wins++
     else p.losses++
@@ -332,7 +342,6 @@ function buildPlayers(rows: Row[], mode: "kd" | "score") {
     }
 
     const rawRating = KD_WEIGHT * perf + WIN_WEIGHT * smoothedWR
-
     p.rating = Math.max(0, Math.min(1000, rawRating * 1000))
   })
 

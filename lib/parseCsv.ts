@@ -15,6 +15,14 @@ export type MatchRow = {
   score: string
 }
 
+function normalizeName(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // remove accents
+    .replace(/[^a-z0-9]+/g, "")      // remove non-alphanumeric
+}
+
 export function loadAllCSVs(folderName: string): MatchRow[] {
   const folderPath = path.join(process.cwd(), "public", folderName)
 
@@ -34,9 +42,11 @@ export function loadAllCSVs(folderName: string): MatchRow[] {
     })
 
     parsed.data.forEach((row) => {
-      if (!row.matchTime || !row.profile) return
+      if (!row.matchTime || !row.name) return
 
-      const key = `${row.matchTime}__${row.profile}`
+      const normalized = normalizeName(row.name)
+
+      const key = `${row.matchTime}__${normalized}`
 
       if (!map.has(key)) {
         map.set(key, row)
