@@ -67,7 +67,6 @@
 
         const kills = parseInt(row.children[2]?.innerText.trim(), 10) || 0
         const deaths = parseInt(row.children[4]?.innerText.trim(), 10) || 0
-        const score = parseInt(row.children[7]?.innerText.trim(), 10) || 0
 
         if (!playerStats[profileUrl]) {
           playerStats[profileUrl] = {
@@ -77,7 +76,6 @@
             losses: 0,
             totalKills: 0,
             totalDeaths: 0,
-            totalScore: 0,
             matches: 0,
           }
         }
@@ -89,7 +87,6 @@
 
         player.totalKills += kills
         player.totalDeaths += deaths
-        player.totalScore += score
         player.matches++
 
         if (nickname !== "(empty)") {
@@ -106,7 +103,6 @@
           scoreB,
           kills,
           deaths,
-          score,
         })
       })
     }

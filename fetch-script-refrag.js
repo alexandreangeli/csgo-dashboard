@@ -49,8 +49,6 @@
 
       const { k: kills, d: deaths } = parseKDA(kdaText)
 
-      const score = parseFloat(adrText) || 0
-
       if (!playerStats[profileUrl || nickname]) {
         playerStats[profileUrl || nickname] = {
           name: nickname,
@@ -59,7 +57,6 @@
           losses: 0,
           totalKills: 0,
           totalDeaths: 0,
-          totalScore: 0,
           matches: 0,
         }
       }
@@ -71,7 +68,6 @@
 
       player.totalKills += kills
       player.totalDeaths += deaths
-      player.totalScore += score
       player.matches++
 
       rowsForCSV.push({
@@ -84,7 +80,6 @@
         scoreB,
         kills,
         deaths,
-        score,
       })
     })
   }

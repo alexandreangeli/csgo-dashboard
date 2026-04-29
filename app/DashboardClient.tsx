@@ -12,7 +12,6 @@ type Row = {
   scoreB: string
   kills: string
   deaths: string
-  score: string
 }
 
 type Player = {
@@ -22,11 +21,9 @@ type Player = {
   losses: number
   totalKills: number
   totalDeaths: number
-  totalScore: number
   matches: number
   winRate: number
   kd: number
-  avgScore: number
   rating: number
 }
 
@@ -36,7 +33,7 @@ export default function DashboardClient({ rows }: { rows: Row[] }) {
   )
   const [selected, setSelected] = useState<string[]>([])
 
-  // DEFAULT = SCORE
+  // DEFAULT = KD
   const [mode, setMode] = useState<"kd" | "score">("kd")
 
   const players = buildPlayers(rows, mode)
@@ -66,26 +63,6 @@ export default function DashboardClient({ rows }: { rows: Row[] }) {
           Player leaderboard and match history
         </p>
       </header>
-
-      {/* TOGGLE */}
-      {/* <div className="flex gap-2 mb-4">
-        <button
-          onClick={() => setMode("score")}
-          className={`px-3 py-1 border rounded ${
-            mode === "score" ? "bg-orange-600 text-white" : ""
-          }`}
-        >
-          Score
-        </button>
-        <button
-          onClick={() => setMode("kd")}
-          className={`px-3 py-1 border rounded ${
-            mode === "kd" ? "bg-orange-600 text-white" : ""
-          }`}
-        >
-          K/D
-        </button>
-      </div> */}
 
       {/* Tabs */}
       <div className="flex gap-2 mb-6">
@@ -117,7 +94,6 @@ export default function DashboardClient({ rows }: { rows: Row[] }) {
                   <th className="px-4 py-2 text-right">Matches</th>
                   <th className="px-4 py-2 text-right">Win Rate</th>
                   <th className="px-4 py-2 text-right">K/D</th>
-                  <th className="px-4 py-2 text-right">Score</th>
                 </tr>
               </thead>
               <tbody>
@@ -132,9 +108,6 @@ export default function DashboardClient({ rows }: { rows: Row[] }) {
                       {(p.winRate * 100).toFixed(1)}%
                     </td>
                     <td className="px-4 py-3 text-right">{p.kd.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-right">
-                      {p.avgScore.toFixed(1)}
-                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -214,24 +187,26 @@ function Team({ title, players }: any) {
   return (
     <div>
       <h4 className="text-sm font-medium mb-2">{title}</h4>
-      <table>
+
+      <table className="border-collapse">
         <thead>
           <tr>
-            <th>Player</th>
-            <th>K</th>
-            <th>D</th>
-            <th>K/D</th>
-            <th>Score</th>
+            <th className="text-left px-3 py-1">Player</th>
+            <th className="text-left px-3 py-1">K</th>
+            <th className="text-left px-3 py-1">D</th>
+            <th className="text-left px-3 py-1">K/D</th>
           </tr>
         </thead>
+
         <tbody>
           {players.map((p: any, i: number) => (
             <tr key={i}>
-              <td>{p.name}</td>
-              <td>{p.kills}</td>
-              <td>{p.deaths}</td>
-              <td>{(p.kills / (p.deaths || 1)).toFixed(2)}</td>
-              <td>{p.score}</td>
+              <td className="px-3 py-1">{p.name}</td>
+              <td className="px-3 py-1">{p.kills}</td>
+              <td className="px-3 py-1">{p.deaths}</td>
+              <td className="px-3 py-1">
+                {(p.kills / (p.deaths || 1)).toFixed(2)}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -240,7 +215,6 @@ function Team({ title, players }: any) {
   )
 }
 
-/* ONLY CHANGE HERE */
 function groupMatches(rows: Row[]) {
   const map: Record<string, any> = {}
 
@@ -259,14 +233,16 @@ function groupMatches(rows: Row[]) {
       name: r.name,
       kills: Number(r.kills),
       deaths: Number(r.deaths),
-      score: Number(r.score), // NEW
     }
 
     if (r.team === "A") map[r.matchTime].teamA.push(entry)
     else map[r.matchTime].teamB.push(entry)
   })
 
-  return Object.values(map)
+  return Object.values(map).sort(
+    (a: any, b: any) =>
+      new Date(b.matchTime).getTime() - new Date(a.matchTime).getTime(),
+  )
 }
 
 function normalizeName(name: string) {
@@ -277,7 +253,7 @@ function normalizeName(name: string) {
     .replace(/[^a-z0-9]+/g, "")
 }
 
-function buildPlayers(rows: Row[], mode: "kd" | "score") {
+function buildPlayers(rows: Row[], mode: "kd") {
   const map: Record<string, any> = {}
 
   rows.forEach((r) => {
@@ -291,7 +267,6 @@ function buildPlayers(rows: Row[], mode: "kd" | "score") {
         losses: 0,
         totalKills: 0,
         totalDeaths: 0,
-        totalScore: 0,
         matches: 0,
       }
     }
@@ -303,23 +278,19 @@ function buildPlayers(rows: Row[], mode: "kd" | "score") {
 
     p.totalKills += Number(r.kills)
     p.totalDeaths += Number(r.deaths)
-    p.totalScore += Number(r.score)
     p.matches++
   })
 
   let players = Object.values(map).map((p: any) => {
     const winRate = p.matches > 0 ? p.wins / p.matches : 0
     const kd = p.totalDeaths > 0 ? p.totalKills / p.totalDeaths : p.totalKills
-    const avgScore = p.matches > 0 ? p.totalScore / p.matches : 0
 
-    return { ...p, winRate, kd, avgScore }
+    return { ...p, winRate, kd }
   })
 
   const maxKD = Math.max(...players.map((p) => p.kd), 1)
-  const maxScore = Math.max(...players.map((p) => p.avgScore), 1)
 
   const kdCap = 0.9 * maxKD
-  const scoreCap = 0.9 * maxScore
 
   const PRIOR_WR = 0.5
   const PRIOR_WEIGHT = 10
@@ -336,9 +307,6 @@ function buildPlayers(rows: Row[], mode: "kd" | "score") {
     if (mode === "kd") {
       const cappedKD = Math.min(p.kd, kdCap)
       perf = cappedKD / kdCap
-    } else {
-      const cappedScore = Math.min(p.avgScore, scoreCap)
-      perf = cappedScore / scoreCap
     }
 
     const rawRating = KD_WEIGHT * perf + WIN_WEIGHT * smoothedWR

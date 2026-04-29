@@ -1,11 +1,11 @@
-matchTime,profile,name,team,win,scoreA,scoreB,kills,deaths,score
-2026-04-29 00:36:00 GMT,https://play.refrag.gg/user/3650bbdd-bc09-4b63-ae5e-dd9153016b0a,Train!,A,1,19,17,32,26,105.56
-2026-04-29 00:36:00 GMT,refrag://player/bedim,bedim,A,1,19,17,33,25,87.72
-2026-04-29 00:36:00 GMT,https://play.refrag.gg/user/fefbe0e0-55ab-4571-b5fe-d8a24fb8b67d,Black$Fox,A,1,19,17,28,26,89.39
-2026-04-29 00:36:00 GMT,refrag://player/gb,GB,A,1,19,17,22,25,62.81
-2026-04-29 00:36:00 GMT,refrag://player/calvinho2-0,Calvinho2.0,A,1,19,17,14,28,46.17
-2026-04-29 00:36:00 GMT,https://play.refrag.gg/user/53b63b7c-0fe1-4ce5-821c-cdd6957a71d6,gangstarr,B,0,19,17,36,23,110.53
-2026-04-29 00:36:00 GMT,refrag://player/leif,leif,B,0,19,17,28,23,82.19
-2026-04-29 00:36:00 GMT,refrag://player/pedrao,Pedrão,B,0,19,17,27,26,86.06
-2026-04-29 00:36:00 GMT,refrag://player/mestre-ensinador,mestre ensinador,B,0,19,17,25,28,67.53
-2026-04-29 00:36:00 GMT,refrag://player/berna-o-cara-ideal,Berna o cara ideal,B,0,19,17,13,29,47.92
+matchTime,profile,name,team,win,scoreA,scoreB,kills,deaths
+2026-04-29 00:36:00 GMT,https://play.refrag.gg/user/3650bbdd-bc09-4b63-ae5e-dd9153016b0a,Train!,A,1,19,17,32,26
+2026-04-29 00:36:00 GMT,refrag://player/bedim,bedim,A,1,19,17,33,25
+2026-04-29 00:36:00 GMT,https://play.refrag.gg/user/fefbe0e0-55ab-4571-b5fe-d8a24fb8b67d,Black$Fox,A,1,19,17,28,26
+2026-04-29 00:36:00 GMT,refrag://player/gb,GB,A,1,19,17,22,25
+2026-04-29 00:36:00 GMT,refrag://player/calvinho2-0,Calvinho2.0,A,1,19,17,14,28
+2026-04-29 00:36:00 GMT,https://play.refrag.gg/user/53b63b7c-0fe1-4ce5-821c-cdd6957a71d6,gangstarr,B,0,19,17,36,23
+2026-04-29 00:36:00 GMT,refrag://player/leif,leif,B,0,19,17,28,23
+2026-04-29 00:36:00 GMT,refrag://player/pedrao,Pedrão,B,0,19,17,27,26
+2026-04-29 00:36:00 GMT,refrag://player/mestre-ensinador,mestre ensinador,B,0,19,17,25,28
+2026-04-29 00:36:00 GMT,refrag://player/berna-o-cara-ideal,Berna o cara ideal,B,0,19,17,13,29
