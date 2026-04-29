@@ -48,8 +48,8 @@ export function buildPlayers(rows: Row[], mode: "kd") {
 
   const PRIOR_WR = 0.5
   const PRIOR_WEIGHT = 10
-  const KD_WEIGHT = 0.65
-  const WIN_WEIGHT = 0.35
+  const KD_WEIGHT = 0.7
+  const WIN_WEIGHT = 0.3
 
   players.forEach((p: any) => {
     const smoothedWR =
