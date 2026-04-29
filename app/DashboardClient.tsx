@@ -211,13 +211,6 @@ export default function DashboardClient({ rows }: { rows: Row[] }) {
 }
 
 function Team({ title, players }: any) {
-  const sorted = [...players].sort((a, b) => {
-    // fallback if rating doesn't exist (matches tab)
-    const ra = a.rating ?? a.score ?? 0
-    const rb = b.rating ?? b.score ?? 0
-    return rb - ra
-  })
-
   return (
     <div>
       <h4 className="text-sm font-medium mb-2">{title}</h4>
@@ -232,7 +225,7 @@ function Team({ title, players }: any) {
           </tr>
         </thead>
         <tbody>
-          {sorted.map((p: any, i: number) => (
+          {players.map((p: any, i: number) => (
             <tr key={i}>
               <td>{p.name}</td>
               <td>{p.kills}</td>
@@ -394,7 +387,9 @@ function sum(players: any[]) {
 }
 
 function BalancedTeam({ title, players }: any) {
-  const total = players.reduce((s: number, p: any) => s + p.rating, 0)
+  const sorted = [...players].sort((a: any, b: any) => b.rating - a.rating)
+
+  const total = sorted.reduce((s: number, p: any) => s + p.rating, 0)
 
   return (
     <div className="p-4 rounded-lg border">
@@ -403,7 +398,7 @@ function BalancedTeam({ title, players }: any) {
       </h3>
 
       <ul className="text-sm space-y-1">
-        {players.map((p: any) => (
+        {sorted.map((p: any) => (
           <li key={p.profile}>
             {p.name} ({p.rating.toFixed(0)})
           </li>
