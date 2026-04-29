@@ -210,8 +210,14 @@ export default function DashboardClient({ rows }: { rows: Row[] }) {
   )
 }
 
-/* ONLY CHANGE HERE */
 function Team({ title, players }: any) {
+  const sorted = [...players].sort((a, b) => {
+    // fallback if rating doesn't exist (matches tab)
+    const ra = a.rating ?? a.score ?? 0
+    const rb = b.rating ?? b.score ?? 0
+    return rb - ra
+  })
+
   return (
     <div>
       <h4 className="text-sm font-medium mb-2">{title}</h4>
@@ -226,7 +232,7 @@ function Team({ title, players }: any) {
           </tr>
         </thead>
         <tbody>
-          {players.map((p: any, i: number) => (
+          {sorted.map((p: any, i: number) => (
             <tr key={i}>
               <td>{p.name}</td>
               <td>{p.kills}</td>
