@@ -23,4 +23,4 @@ export type Player = {
   rating: number
 }
 
-export type TabType = "Leaderboard" | "Matches" | "Balance"
+export type TabType = "Balanceador" | "Ranking" | "Partidas"

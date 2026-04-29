@@ -12,7 +12,7 @@ import { MatchesList } from "@/app/components/MatchesList"
 import { BalanceSection } from "@/app/components/BalanceSection"
 
 export default function DashboardClient({ rows }: { rows: Row[] }) {
-  const [tab, setTab] = useState<TabType>("Balance")
+  const [tab, setTab] = useState<TabType>("Balanceador")
   const [selected, setSelected] = useState<string[]>([])
   const [mode, setMode] = useState<"kd">("kd")
 
@@ -40,7 +40,7 @@ export default function DashboardClient({ rows }: { rows: Row[] }) {
       <Header />
       <TabNavigation activeTab={tab} onTabChange={setTab} />
 
-      {tab === "Balance" && (
+      {tab === "Balanceador" && (
         <BalanceSection
           byRating={byRating}
           selected={selected}
@@ -48,8 +48,8 @@ export default function DashboardClient({ rows }: { rows: Row[] }) {
           balanced={balanced}
         />
       )}
-      {tab === "Leaderboard" && <Leaderboard players={players} />}
-      {tab === "Matches" && <MatchesList matches={matches} />}
+      {tab === "Ranking" && <Leaderboard players={players} />}
+      {tab === "Partidas" && <MatchesList matches={matches} />}
     </main>
   )
 }
