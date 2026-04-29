@@ -11,7 +11,7 @@ export function Team({ title, players }: TeamProps) {
       <table className="border-collapse">
         <thead>
           <tr>
-            <th className="text-left px-3 py-1">Player</th>
+            <th className="text-left px-3 py-1">Jogador</th>
             <th className="text-left px-3 py-1">K</th>
             <th className="text-left px-3 py-1">D</th>
             <th className="text-left px-3 py-1">K/D</th>

@@ -21,10 +21,12 @@ export function BalanceSection({
 }: BalanceSectionProps) {
   return (
     <section>
-      <h2 className="text-xl font-semibold mb-4">Balance Teams (10 players)</h2>
+      <h2 className="text-xl font-semibold mb-4">
+        Balancear Times (10 jogadores)
+      </h2>
 
       <p className="text-sm text-muted mb-4">
-        Selected: {selected.length} / 10
+        Selecionados: {selected.length} / 10
       </p>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6">
@@ -49,8 +51,8 @@ export function BalanceSection({
 
       {balanced && (
         <div className="grid md:grid-cols-2 gap-6">
-          <BalancedTeam title="Team A" players={balanced.teamA} />
-          <BalancedTeam title="Team B" players={balanced.teamB} />
+          <BalancedTeam title="Time A" players={balanced.teamA} />
+          <BalancedTeam title="Time B" players={balanced.teamB} />
         </div>
       )}
     </section>

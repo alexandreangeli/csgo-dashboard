@@ -6,7 +6,7 @@ type TabNavigationProps = {
 }
 
 export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
-  const tabs: TabType[] = ["Balance", "Leaderboard", "Matches"]
+  const tabs: TabType[] = ["Balanceador", "Ranking", "Partidas"]
 
   return (
     <div className="flex gap-2 mb-6">
