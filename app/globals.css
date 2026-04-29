@@ -32,8 +32,7 @@ body {
 
 /* Cards */
 .card,
-article,
-.rounded-lg {
+article {
   background: var(--card);
   border: 1px solid var(--border);
 }

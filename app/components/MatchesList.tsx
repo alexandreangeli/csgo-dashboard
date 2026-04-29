@@ -1,12 +1,5 @@
 import { Team } from "./Team"
-
-type MatchData = {
-  matchTime: string
-  scoreA: string
-  scoreB: string
-  teamA: any[]
-  teamB: any[]
-}
+import type { MatchData } from "@/app/types"
 
 type MatchesListProps = {
   matches: MatchData[]
@@ -41,29 +34,29 @@ export function MatchesList({ matches }: MatchesListProps) {
                   const scoreBNum = parseInt(match.scoreB)
                   const isAWinner = scoreANum > scoreBNum
                   const isBWinner = scoreBNum > scoreANum
-                  const isDraw = scoreANum === scoreBNum
-
                   return (
                     <div className="flex gap-1 font-bold text-lg">
                       <span
                         className={`${
                           isAWinner
-                            ? "text-green-600"
+                            ? "text-green-600 dark:text-green-400"
                             : isBWinner
-                              ? "text-red-600"
-                              : "text-gray-600"
+                              ? "text-red-600 dark:text-red-400"
+                              : "text-slate-600 dark:text-slate-400"
                         }`}
                       >
                         {match.scoreA}
                       </span>
-                      <span className="text-gray-400">:</span>
+                      <span className="text-slate-400 dark:text-slate-500">
+                        :
+                      </span>
                       <span
                         className={`${
                           isBWinner
-                            ? "text-green-600"
+                            ? "text-green-600 dark:text-green-400"
                             : isAWinner
-                              ? "text-red-600"
-                              : "text-gray-600"
+                              ? "text-red-600 dark:text-red-400"
+                              : "text-slate-600 dark:text-slate-400"
                         }`}
                       >
                         {match.scoreB}

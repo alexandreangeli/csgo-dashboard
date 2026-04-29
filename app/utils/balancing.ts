@@ -1,9 +1,9 @@
-import type { Player } from "@/app/types"
+import type { BalancedTeams, Player } from "@/app/types"
 
-export function balanceTeams(players: Player[]) {
+export function balanceTeams(players: Player[]): BalancedTeams | null {
   const combos = combinations(players, 5)
 
-  let best: any = null
+  let best: BalancedTeams | null = null
   let bestDiff = Infinity
 
   combos.forEach((teamA) => {
@@ -23,10 +23,10 @@ export function balanceTeams(players: Player[]) {
   return best
 }
 
-export function combinations(arr: any[], k: number): any[][] {
-  const result: any[][] = []
+export function combinations<T>(arr: T[], k: number): T[][] {
+  const result: T[][] = []
 
-  function backtrack(start: number, path: any[]) {
+  function backtrack(start: number, path: T[]) {
     if (path.length === k) {
       result.push([...path])
       return
@@ -43,6 +43,6 @@ export function combinations(arr: any[], k: number): any[][] {
   return result
 }
 
-export function sum(players: any[]) {
+export function sum(players: Player[]) {
   return players.reduce((s, p) => s + p.rating, 0)
 }

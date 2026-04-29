@@ -23,4 +23,24 @@ export type Player = {
   rating: number
 }
 
+export type MatchPlayer = {
+  name: string
+  profile: string
+  kills: number
+  deaths: number
+}
+
+export type MatchData = {
+  matchTime: string
+  scoreA: string
+  scoreB: string
+  teamA: MatchPlayer[]
+  teamB: MatchPlayer[]
+}
+
+export type BalancedTeams = {
+  teamA: Player[]
+  teamB: Player[]
+}
+
 export type TabType = "Balanceador" | "Ranking" | "Partidas"

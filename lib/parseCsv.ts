@@ -23,6 +23,11 @@ function normalizeName(name: string): string {
     .replace(/[^a-z0-9]+/g, "")      // remove non-alphanumeric
 }
 
+function displayName(name: string): string {
+  const trimmed = name.trim()
+  return normalizeName(trimmed) ? trimmed : "Lorenzo"
+}
+
 export function loadAllCSVs(folderName: string): MatchRow[] {
   const folderPath = path.join(process.cwd(), "public", folderName)
 
@@ -44,11 +49,13 @@ export function loadAllCSVs(folderName: string): MatchRow[] {
     parsed.data.forEach((row) => {
       if (!row.matchTime || !row.name) return
 
-      const normalized = normalizeName(row.name)
+      const normalizedName = displayName(row.name)
+      const normalized = normalizeName(normalizedName)
 
       const key = `${row.matchTime}__${normalized}`
 
       if (!map.has(key)) {
+        row.name = normalizedName
         map.set(key, row)
       }
     })

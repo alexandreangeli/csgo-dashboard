@@ -1,7 +1,8 @@
-import type { Row } from "@/app/types"
+import type { MatchData, MatchPlayer, Row } from "@/app/types"
+import { normalizeName } from "./playerStats"
 
-export function groupMatches(rows: Row[]) {
-  const map: Record<string, any> = {}
+export function groupMatches(rows: Row[]): MatchData[] {
+  const map: Record<string, MatchData> = {}
 
   rows.forEach((r) => {
     if (!map[r.matchTime]) {
@@ -14,8 +15,9 @@ export function groupMatches(rows: Row[]) {
       }
     }
 
-    const entry = {
+    const entry: MatchPlayer = {
       name: r.name,
+      profile: normalizeName(r.name),
       kills: Number(r.kills),
       deaths: Number(r.deaths),
     }
@@ -25,7 +27,6 @@ export function groupMatches(rows: Row[]) {
   })
 
   return Object.values(map).sort(
-    (a: any, b: any) =>
-      new Date(b.matchTime).getTime() - new Date(a.matchTime).getTime(),
+    (a, b) => new Date(b.matchTime).getTime() - new Date(a.matchTime).getTime(),
   )
 }

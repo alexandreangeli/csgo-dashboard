@@ -1,10 +1,5 @@
-import type { Player } from "@/app/types"
+import type { BalancedTeams, Player } from "@/app/types"
 import { BalancedTeam } from "./BalancedTeam"
-
-type BalancedTeams = {
-  teamA: Player[]
-  teamB: Player[]
-}
 
 type BalanceSectionProps = {
   byRating: Player[]
@@ -53,7 +48,7 @@ export function BalanceSection({
               className={`p-2 border rounded text-left text-sm ${
                 isSelected
                   ? "bg-orange-600 text-white dark:bg-orange-400 dark:text-black"
-                  : ""
+                  : "border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800"
               }`}
             >
               {p.name} ({p.rating.toFixed(0)})
@@ -68,7 +63,7 @@ export function BalanceSection({
             title="Time A"
             players={balanced.teamA}
             otherTeamTotal={balanced.teamB.reduce(
-              (s: number, p: any) => s + p.rating,
+              (s, p) => s + p.rating,
               0,
             )}
           />
@@ -76,7 +71,7 @@ export function BalanceSection({
             title="Time B"
             players={balanced.teamB}
             otherTeamTotal={balanced.teamA.reduce(
-              (s: number, p: any) => s + p.rating,
+              (s, p) => s + p.rating,
               0,
             )}
           />
