@@ -15,14 +15,34 @@ export type MatchRow = {
   score: string
 }
 
-export function loadCSV(fileName: string): MatchRow[] {
-  const filePath = path.join(process.cwd(), "public", fileName)
-  const file = fs.readFileSync(filePath, "utf8")
+export function loadAllCSVs(folderName: string): MatchRow[] {
+  const folderPath = path.join(process.cwd(), "public", folderName)
 
-  const parsed = Papa.parse<MatchRow>(file, {
-    header: true,
-    skipEmptyLines: true,
+  const files = fs
+    .readdirSync(folderPath)
+    .filter((file) => file.endsWith(".csv"))
+
+  const map = new Map<string, MatchRow>()
+
+  files.forEach((fileName) => {
+    const filePath = path.join(folderPath, fileName)
+    const fileContent = fs.readFileSync(filePath, "utf8")
+
+    const parsed = Papa.parse<MatchRow>(fileContent, {
+      header: true,
+      skipEmptyLines: true,
+    })
+
+    parsed.data.forEach((row) => {
+      if (!row.matchTime || !row.profile) return
+
+      const key = `${row.matchTime}__${row.profile}`
+
+      if (!map.has(key)) {
+        map.set(key, row)
+      }
+    })
   })
 
-  return parsed.data
+  return Array.from(map.values())
 }
