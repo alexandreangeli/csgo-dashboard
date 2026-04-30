@@ -1,24 +1,70 @@
-(() => {
-  const playerStats = {}
+;(() => {
   const rowsForCSV = []
 
+  // --- date normalization ---
+  function parseRefragDate(str) {
+    if (!str) return null
+
+    const cleaned = str.replace(/(\d+)(st|nd|rd|th)/, "$1")
+    const date = new Date(cleaned)
+    if (isNaN(date)) return str
+
+    const pad = (n) => String(n).padStart(2, "0")
+
+    return (
+      date.getUTCFullYear() +
+      "-" +
+      pad(date.getUTCMonth() + 1) +
+      "-" +
+      pad(date.getUTCDate()) +
+      " " +
+      pad(date.getUTCHours()) +
+      ":" +
+      pad(date.getUTCMinutes()) +
+      ":" +
+      pad(date.getUTCSeconds()) +
+      " GMT"
+    )
+  }
+
+  // --- profile fallback ---
+  function normalizeName(name) {
+    return name
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+  }
+
+  function resolveProfile(profileUrl, nickname) {
+    if (profileUrl) return profileUrl
+    return `refrag://player/${normalizeName(nickname)}`
+  }
+
   // --- match meta ---
-  const matchTimeEl = document.querySelector(
-    ".text-text-secondary.text-xs.lg\\:text-sm",
-  )
-  const matchTime = matchTimeEl?.innerText.trim() || null
+  const rawMatchTime = (() => {
+    const containers = document.querySelectorAll(
+      ".flex.flex-col.gap-3.items-center, .flex.flex-col.gap-3.items-center.justify-center",
+    )
+
+    for (const el of containers) {
+      const texts = el.querySelectorAll(".text-text-secondary")
+      if (texts.length) {
+        return texts[texts.length - 1].innerText.trim()
+      }
+    }
+
+    return null
+  })()
+
+  const matchTime = parseRefragDate(rawMatchTime)
 
   const scoreEls = document.querySelectorAll(
-    ".text-4xl h1",
+    ".text-4xl h1, .text-\\[48px\\] h1",
   )
-
-  let scoreA = 0
-  let scoreB = 0
-
-  if (scoreEls.length >= 2) {
-    scoreA = parseInt(scoreEls[0].innerText.trim(), 10)
-    scoreB = parseInt(scoreEls[1].innerText.trim(), 10)
-  }
+  const scoreA = parseInt(scoreEls[0]?.innerText || 0, 10)
+  const scoreB = parseInt(scoreEls[1]?.innerText || 0, 10)
 
   // --- tables ---
   const tables = document.querySelectorAll("table")
@@ -38,41 +84,17 @@
       const nickname = nameEl.childNodes[0].textContent.trim()
 
       const profileEl = row.querySelector("td:first-child a")
-      const profileUrl = profileEl
-        ? profileEl.href
-        : null
+      const rawProfile = profileEl ? profileEl.href : null
+      const profile = resolveProfile(rawProfile, nickname)
 
       const cells = row.querySelectorAll("td")
 
       const kdaText = cells[2]?.innerText.trim() || "0/0/0"
-      const adrText = cells[6]?.innerText.trim() || "0"
-
       const { k: kills, d: deaths } = parseKDA(kdaText)
-
-      if (!playerStats[profileUrl || nickname]) {
-        playerStats[profileUrl || nickname] = {
-          name: nickname,
-          profile: profileUrl,
-          wins: 0,
-          losses: 0,
-          totalKills: 0,
-          totalDeaths: 0,
-          matches: 0,
-        }
-      }
-
-      const player = playerStats[profileUrl || nickname]
-
-      if (didWin) player.wins++
-      else player.losses++
-
-      player.totalKills += kills
-      player.totalDeaths += deaths
-      player.matches++
 
       rowsForCSV.push({
         matchTime,
-        profile: profileUrl,
+        profile,
         name: nickname,
         team: teamLabel,
         win: didWin ? 1 : 0,
@@ -84,7 +106,6 @@
     })
   }
 
-  // first table = winning, second = losing
   processTable(tables[0], true, "A")
   processTable(tables[1], false, "B")
 
@@ -103,12 +124,10 @@
       return str
     }
 
-    const lines = [
+    return [
       headers.join(","),
       ...rows.map((row) => headers.map((h) => escape(row[h])).join(",")),
-    ]
-
-    return lines.join("\n")
+    ].join("\n")
   }
 
   const csv = toCSV(rowsForCSV)
