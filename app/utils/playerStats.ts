@@ -35,10 +35,21 @@ export function buildPlayers(rows: Row[], mode: "kd") {
     p.totalDeaths += Number(r.deaths)
     p.matches++
   })
+  const KD_BAYESIAN_PRIOR = 1.0
+  const KD_BAYESIAN_WEIGHT = 10
+
+  const WR_BAYESIAN_PRIOR = 0.5
+  const WR_BAYESIAN_WEIGHT = 10
+
+  const KD_WEIGHT_RATING = 0.7
+  const WR_WEIGHT = 0.3
 
   let players = Object.values(map).map((p: any) => {
     const winRate = p.matches > 0 ? p.wins / p.matches : 0
-    const kd = p.totalDeaths > 0 ? p.totalKills / p.totalDeaths : p.totalKills
+
+    const kd =
+      (p.totalKills + KD_BAYESIAN_PRIOR * KD_BAYESIAN_WEIGHT) /
+      (p.totalDeaths + KD_BAYESIAN_WEIGHT)
 
     return { ...p, winRate, kd }
   })
@@ -46,14 +57,10 @@ export function buildPlayers(rows: Row[], mode: "kd") {
   const maxKD = Math.max(...players.map((p) => p.kd), 1)
   const kdCap = 0.9 * maxKD
 
-  const PRIOR_WR = 0.5
-  const PRIOR_WEIGHT = 10
-  const KD_WEIGHT = 0.7
-  const WIN_WEIGHT = 0.3
-
   players.forEach((p: any) => {
     const smoothedWR =
-      (p.wins + PRIOR_WR * PRIOR_WEIGHT) / (p.matches + PRIOR_WEIGHT)
+      (p.wins + WR_BAYESIAN_PRIOR * WR_BAYESIAN_WEIGHT) /
+      (p.matches + WR_BAYESIAN_WEIGHT)
 
     let perf = 0
 
@@ -62,7 +69,7 @@ export function buildPlayers(rows: Row[], mode: "kd") {
       perf = cappedKD / kdCap
     }
 
-    const rawRating = KD_WEIGHT * perf + WIN_WEIGHT * smoothedWR
+    const rawRating = KD_WEIGHT_RATING * perf + WR_WEIGHT * smoothedWR
     p.rating = Math.max(0, Math.min(1000, rawRating * 1000))
   })
 
