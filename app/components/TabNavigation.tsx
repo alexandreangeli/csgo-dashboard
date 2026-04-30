@@ -7,14 +7,14 @@ type TabNavigationProps = {
 
 export function TabNavigation({ activeTab }: TabNavigationProps) {
   const tabs: Array<{ name: TabType; href: string; icon: string }> = [
-    { name: "Balanceador", href: "/balanceador", icon: "⚖️" },
-    { name: "Ranking", href: "/ranking", icon: "🏆" },
-    { name: "Partidas", href: "/partidas", icon: "📋" },
+    { name: "Balanceador", href: "/balanceador" },
+    { name: "Ranking", href: "/ranking" },
+    { name: "Partidas", href: "/partidas" },
   ]
 
   return (
     <nav className="flex gap-2 mb-6" aria-label="Seções do dashboard">
-      {tabs.map(({ name, href, icon }) => (
+      {tabs.map(({ name, href }) => (
         <Link
           key={name}
           href={href}
@@ -25,14 +25,6 @@ export function TabNavigation({ activeTab }: TabNavigationProps) {
           }`}
           aria-current={activeTab === name ? "page" : undefined}
         >
-          <span
-            className={`mr-1 text-lg ${
-              activeTab === name ? "drop-shadow-lg" : ""
-            }`}
-            aria-hidden="true"
-          >
-            {icon}
-          </span>
           {name}
         </Link>
       ))}
