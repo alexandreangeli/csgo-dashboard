@@ -20,12 +20,21 @@ function normalizeName(name: string): string {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "") // remove accents
-    .replace(/[^a-z0-9]+/g, "")      // remove non-alphanumeric
+    .replace(/[^a-z0-9]+/g, "") // remove non-alphanumeric
 }
 
 function displayName(name: string): string {
   const trimmed = name.trim()
   return normalizeName(trimmed) ? trimmed : "Lorenzo"
+}
+
+const playerAccountMap: Record<string, string> = {
+  Lorenzo: "fait",
+  fait: "fait",
+}
+
+function getCanonicalName(name: string): string {
+  return playerAccountMap[name] || name
 }
 
 export function loadAllCSVs(folderName: string): MatchRow[] {
@@ -50,12 +59,13 @@ export function loadAllCSVs(folderName: string): MatchRow[] {
       if (!row.matchTime || !row.name) return
 
       const normalizedName = displayName(row.name)
-      const normalized = normalizeName(normalizedName)
+      const canonicalName = getCanonicalName(normalizedName)
+      const normalized = normalizeName(canonicalName)
 
       const key = `${row.matchTime}__${normalized}`
 
       if (!map.has(key)) {
-        row.name = normalizedName
+        row.name = canonicalName
         map.set(key, row)
       }
     })
