@@ -84,7 +84,7 @@ export function buildPlayers(rows: Row[], mode: "kd") {
 
     const rawRating = KD_WEIGHT_RATING * perf + WR_WEIGHT * smoothedWR
 
-    p.rating = Math.max(0, Math.min(1000, rawRating * 1000))
+    p.rating = Math.round(Math.max(0, Math.min(1000, rawRating * 1000)))
   })
 
   return players
