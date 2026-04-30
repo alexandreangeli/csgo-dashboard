@@ -17,6 +17,7 @@ export function Team({ title, players }: TeamProps) {
             <th className="text-left px-3 py-1">Jogador</th>
             <th className="text-left px-3 py-1">K</th>
             <th className="text-left px-3 py-1">D</th>
+            <th className="text-left px-3 py-1">A</th>
             <th className="text-left px-3 py-1">K/D</th>
           </tr>
         </thead>
@@ -37,6 +38,7 @@ export function Team({ title, players }: TeamProps) {
               </td>
               <td className="px-3 py-1">{p.kills}</td>
               <td className="px-3 py-1">{p.deaths}</td>
+              <td className="px-3 py-1">{p.assists}</td>
               <td className="px-3 py-1">
                 {(p.kills / (p.deaths || 1)).toFixed(2)}
               </td>

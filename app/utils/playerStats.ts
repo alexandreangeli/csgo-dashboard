@@ -22,6 +22,7 @@ export function buildPlayers(rows: Row[], mode: "kd") {
         losses: 0,
         totalKills: 0,
         totalDeaths: 0,
+        totalAssists: 0,
         matches: 0,
       }
     }
@@ -33,8 +34,10 @@ export function buildPlayers(rows: Row[], mode: "kd") {
 
     p.totalKills += Number(r.kills)
     p.totalDeaths += Number(r.deaths)
+    p.totalAssists += Number(r.assists || 0)
     p.matches++
   })
+
   const KD_BAYESIAN_PRIOR = 1.0
   const KD_BAYESIAN_WEIGHT = 5
 
@@ -44,17 +47,27 @@ export function buildPlayers(rows: Row[], mode: "kd") {
   const KD_WEIGHT_RATING = 0.7
   const WR_WEIGHT = 0.3
 
+  const ASSIST_WEIGHT = 0.4
+
   let players = Object.values(map).map((p: any) => {
     const winRate = p.matches > 0 ? p.wins / p.matches : 0
 
-    const kd =
-      (p.totalKills + KD_BAYESIAN_PRIOR * KD_BAYESIAN_WEIGHT) /
+    // Raw K/D ratio (for display)
+    const kd = p.totalKills / (p.totalDeaths || 1)
+
+    const effectiveKills = p.totalKills + ASSIST_WEIGHT * p.totalAssists
+
+    // Smoothed K/D with assists (for rating calculation)
+    const kdSmoothed =
+      (effectiveKills + KD_BAYESIAN_PRIOR * KD_BAYESIAN_WEIGHT) /
       (p.totalDeaths + KD_BAYESIAN_WEIGHT)
 
-    return { ...p, winRate, kd }
+    const kda = (p.totalKills + p.totalAssists) / (p.totalDeaths || 1)
+
+    return { ...p, winRate, kd, kdSmoothed, kda }
   })
 
-  const maxKD = Math.max(...players.map((p) => p.kd), 1)
+  const maxKD = Math.max(...players.map((p) => p.kdSmoothed), 1)
   const kdCap = maxKD
 
   players.forEach((p: any) => {
@@ -65,11 +78,12 @@ export function buildPlayers(rows: Row[], mode: "kd") {
     let perf = 0
 
     if (mode === "kd") {
-      const cappedKD = Math.min(p.kd, kdCap)
+      const cappedKD = Math.min(p.kdSmoothed, kdCap)
       perf = cappedKD / kdCap
     }
 
     const rawRating = KD_WEIGHT_RATING * perf + WR_WEIGHT * smoothedWR
+
     p.rating = Math.max(0, Math.min(1000, rawRating * 1000))
   })
 

@@ -1,7 +1,6 @@
-;(() => {
+(() => {
   const rowsForCSV = []
 
-  // --- date normalization ---
   function parseRefragDate(str) {
     if (!str) return null
 
@@ -27,7 +26,6 @@
     )
   }
 
-  // --- profile fallback ---
   function normalizeName(name) {
     return name
       .toLowerCase()
@@ -42,7 +40,24 @@
     return `refrag://player/${normalizeName(nickname)}`
   }
 
-  // --- match meta ---
+  function extractMapName() {
+    const mapIcon = document.querySelector('img[src*="/maps/map_icon_"]')
+    if (!mapIcon) return null
+
+    const src = mapIcon.getAttribute("src") || ""
+
+    const match = src.match(/map_icon_(.+)\.svg/)
+    if (!match) return null
+
+    const raw = match[1]
+
+    const name = raw.replace(/^[a-z]+_/, "")
+
+    return name.charAt(0).toUpperCase() + name.slice(1)
+  }
+
+  const mapName = extractMapName()
+
   const rawMatchTime = (() => {
     const containers = document.querySelectorAll(
       ".flex.flex-col.gap-3.items-center, .flex.flex-col.gap-3.items-center.justify-center",
@@ -66,7 +81,6 @@
   const scoreA = parseInt(scoreEls[0]?.innerText || 0, 10)
   const scoreB = parseInt(scoreEls[1]?.innerText || 0, 10)
 
-  // --- tables ---
   const tables = document.querySelectorAll("table")
 
   function parseKDA(text) {
@@ -90,10 +104,11 @@
       const cells = row.querySelectorAll("td")
 
       const kdaText = cells[2]?.innerText.trim() || "0/0/0"
-      const { k: kills, d: deaths } = parseKDA(kdaText)
+      const { k: kills, d: deaths, a: assists } = parseKDA(kdaText)
 
       rowsForCSV.push({
         matchTime,
+        map: mapName,
         profile,
         name: nickname,
         team: teamLabel,
@@ -101,6 +116,7 @@
         scoreA,
         scoreB,
         kills,
+        assists,
         deaths,
       })
     })
@@ -109,7 +125,6 @@
   processTable(tables[0], true, "A")
   processTable(tables[1], false, "B")
 
-  // --- CSV ---
   function toCSV(rows) {
     if (!rows.length) return ""
 

@@ -8,6 +8,8 @@ export type Row = {
   scoreB: string
   kills: string
   deaths: string
+  assists: string
+  map: string
 }
 
 export type Player = {
@@ -17,9 +19,11 @@ export type Player = {
   losses: number
   totalKills: number
   totalDeaths: number
+  totalAssists: number
   matches: number
   winRate: number
   kd: number
+  kda: number
   rating: number
 }
 
@@ -28,12 +32,14 @@ export type MatchPlayer = {
   profile: string
   kills: number
   deaths: number
+  assists: number
 }
 
 export type MatchData = {
   matchTime: string
   scoreA: string
   scoreB: string
+  map: string
   teamA: MatchPlayer[]
   teamB: MatchPlayer[]
 }

@@ -36,6 +36,16 @@
       matchTime = timeCell.innerText.trim()
     }
 
+    let mapName = null
+    const mapCell = outerRow?.querySelector(
+      ".csgo_scoreboard_inner_left tr:nth-child(1) td",
+    )
+
+    if (mapCell) {
+      const raw = mapCell.innerText.trim()
+      mapName = raw.replace(/^Competitive\s+/i, "")
+    }
+
     const scoreIndex = rows.findIndex((r) =>
       r.querySelector(".csgo_scoreboard_score"),
     )
@@ -66,6 +76,7 @@
         const profileUrl = resolveProfile(matchTime, rawProfile)
 
         const kills = parseInt(row.children[2]?.innerText.trim(), 10) || 0
+        const assists = parseInt(row.children[3]?.innerText.trim(), 10) || 0
         const deaths = parseInt(row.children[4]?.innerText.trim(), 10) || 0
 
         if (!playerStats[profileUrl]) {
@@ -75,6 +86,7 @@
             wins: 0,
             losses: 0,
             totalKills: 0,
+            totalAssists: 0,
             totalDeaths: 0,
             matches: 0,
           }
@@ -86,6 +98,7 @@
         else player.losses++
 
         player.totalKills += kills
+        player.totalAssists += assists
         player.totalDeaths += deaths
         player.matches++
 
@@ -95,6 +108,7 @@
 
         rowsForCSV.push({
           matchTime,
+          map: mapName,
           profile: profileUrl,
           name: nickname,
           team: teamLabel,
@@ -102,6 +116,7 @@
           scoreA,
           scoreB,
           kills,
+          assists,
           deaths,
         })
       })
@@ -111,7 +126,6 @@
     processTeam(teamB, !teamAWin, "B")
   })
 
-  // --- CSV generation ---
   function toCSV(rows) {
     if (!rows.length) return ""
 
@@ -136,7 +150,6 @@
 
   const csv = toCSV(rowsForCSV)
 
-  // --- download ---
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
   const url = URL.createObjectURL(blob)
 

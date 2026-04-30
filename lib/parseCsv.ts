@@ -12,6 +12,8 @@ export type MatchRow = {
   scoreB: string
   kills: string
   deaths: string
+  assists?: string
+  map?: string
   score: string
 }
 

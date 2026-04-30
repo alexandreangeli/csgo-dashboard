@@ -10,6 +10,7 @@ export function groupMatches(rows: Row[]): MatchData[] {
         matchTime: r.matchTime,
         scoreA: r.scoreA,
         scoreB: r.scoreB,
+        map: r.map || "Unknown",
         teamA: [],
         teamB: [],
       }
@@ -20,6 +21,7 @@ export function groupMatches(rows: Row[]): MatchData[] {
       profile: normalizeName(r.name),
       kills: Number(r.kills),
       deaths: Number(r.deaths),
+      assists: Number(r.assists || 0),
     }
 
     if (r.team === "A") map[r.matchTime].teamA.push(entry)

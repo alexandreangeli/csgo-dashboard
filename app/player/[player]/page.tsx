@@ -2,7 +2,10 @@ import Link from "next/link"
 import { loadAllCSVs } from "@/lib/parseCsv"
 import { buildPlayers } from "@/app/utils/playerStats"
 import { calculateHeadToHeadStats } from "@/app/utils/playerHeadToHead"
+import { groupMatches } from "@/app/utils/matches"
 import { BackButton } from "@/app/components/BackButton"
+import { WinRateSection } from "@/app/components/WinRateSection"
+import { PlayerMatches } from "@/app/components/PlayerMatches"
 
 export default async function PlayerDetailPage({
   params,
@@ -15,6 +18,7 @@ export default async function PlayerDetailPage({
   const player = players.find((p) => p.profile === playerProfile)
 
   const headToHead = calculateHeadToHeadStats(playerProfile, rows)
+  const matches = groupMatches(rows)
 
   if (!player) {
     return (
@@ -107,125 +111,19 @@ export default async function PlayerDetailPage({
         </div>
       </div>
 
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Win Rate vs Adversários</h2>
-        {headToHead.against.length === 0 ? (
-          <p className="text-slate-500 dark:text-slate-400">
-            Nenhuma partida contra outros jogadores
-          </p>
-        ) : (
-          <div className="overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-slate-50 dark:bg-slate-800/70">
-                  <th className="px-4 py-3 text-left">Jogador</th>
-                  <th className="px-4 py-3 text-right">Partidas</th>
-                  <th className="px-4 py-3 text-right">Vitórias</th>
-                  <th className="px-4 py-3 text-right">Derrotas</th>
-                  <th className="px-4 py-3 text-right">Win Rate</th>
-                </tr>
-              </thead>
-              <tbody>
-                {headToHead.against.map((stat) => (
-                  <tr
-                    key={stat.opponentProfile}
-                    className="border-t border-slate-200 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800/60"
-                  >
-                    <td className="px-4 py-3">
-                      <Link
-                        href={`/player/${stat.opponentProfile}`}
-                        className="text-blue-600 hover:underline dark:text-blue-400"
-                      >
-                        {stat.opponentName}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3 text-right font-medium">
-                      {stat.matches}
-                    </td>
-                    <td className="px-4 py-3 text-right text-green-600 font-medium dark:text-green-400">
-                      {stat.wins}
-                    </td>
-                    <td className="px-4 py-3 text-right text-red-600 font-medium dark:text-red-400">
-                      {stat.losses}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <span
-                        className={`px-3 py-1 rounded font-medium ${
-                          stat.winRate >= 0.5
-                            ? "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300"
-                            : "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"
-                        }`}
-                      >
-                        {(stat.winRate * 100).toFixed(1)}%
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      <WinRateSection
+        title="Win Rate vs Adversários"
+        stats={headToHead.against}
+        emptyMessage="Nenhuma partida contra outros jogadores"
+      />
 
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Win Rate com Companheiros</h2>
-        {headToHead.with.length === 0 ? (
-          <p className="text-slate-500 dark:text-slate-400">
-            Nenhuma partida com outros jogadores no mesmo time
-          </p>
-        ) : (
-          <div className="overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-slate-50 dark:bg-slate-800/70">
-                  <th className="px-4 py-3 text-left">Jogador</th>
-                  <th className="px-4 py-3 text-right">Partidas</th>
-                  <th className="px-4 py-3 text-right">Vitórias</th>
-                  <th className="px-4 py-3 text-right">Derrotas</th>
-                  <th className="px-4 py-3 text-right">Win Rate</th>
-                </tr>
-              </thead>
-              <tbody>
-                {headToHead.with.map((stat) => (
-                  <tr
-                    key={stat.opponentProfile}
-                    className="border-t border-slate-200 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800/60"
-                  >
-                    <td className="px-4 py-3">
-                      <Link
-                        href={`/player/${stat.opponentProfile}`}
-                        className="text-blue-600 hover:underline dark:text-blue-400"
-                      >
-                        {stat.opponentName}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3 text-right font-medium">
-                      {stat.matches}
-                    </td>
-                    <td className="px-4 py-3 text-right text-green-600 font-medium dark:text-green-400">
-                      {stat.wins}
-                    </td>
-                    <td className="px-4 py-3 text-right text-red-600 font-medium dark:text-red-400">
-                      {stat.losses}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <span
-                        className={`px-3 py-1 rounded font-medium ${
-                          stat.winRate >= 0.5
-                            ? "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300"
-                            : "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"
-                        }`}
-                      >
-                        {(stat.winRate * 100).toFixed(1)}%
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      <WinRateSection
+        title="Win Rate com Companheiros"
+        stats={headToHead.with}
+        emptyMessage="Nenhuma partida com outros jogadores no mesmo time"
+      />
+
+      <PlayerMatches matches={matches} playerProfile={playerProfile} />
     </main>
   )
 }
