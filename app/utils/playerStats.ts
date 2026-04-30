@@ -36,10 +36,10 @@ export function buildPlayers(rows: Row[], mode: "kd") {
     p.matches++
   })
   const KD_BAYESIAN_PRIOR = 1.0
-  const KD_BAYESIAN_WEIGHT = 10
+  const KD_BAYESIAN_WEIGHT = 5
 
   const WR_BAYESIAN_PRIOR = 0.5
-  const WR_BAYESIAN_WEIGHT = 10
+  const WR_BAYESIAN_WEIGHT = 5
 
   const KD_WEIGHT_RATING = 0.7
   const WR_WEIGHT = 0.3
@@ -55,7 +55,7 @@ export function buildPlayers(rows: Row[], mode: "kd") {
   })
 
   const maxKD = Math.max(...players.map((p) => p.kd), 1)
-  const kdCap = 0.9 * maxKD
+  const kdCap = maxKD
 
   players.forEach((p: any) => {
     const smoothedWR =

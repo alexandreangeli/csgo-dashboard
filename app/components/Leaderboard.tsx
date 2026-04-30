@@ -1,4 +1,7 @@
+"use client"
+
 import Link from "next/link"
+import { useState } from "react"
 import type { Player } from "@/app/types"
 
 type LeaderboardProps = {
@@ -6,11 +9,24 @@ type LeaderboardProps = {
 }
 
 export function Leaderboard({ players }: LeaderboardProps) {
+  const [hideNewPlayers, setHideNewPlayers] = useState(true)
   const byRating = [...players].sort((a, b) => b.rating - a.rating)
+  const filteredPlayers = hideNewPlayers
+    ? byRating.filter((p) => p.matches >= 5)
+    : byRating
 
   return (
     <section>
       <h2 className="text-xl font-semibold mb-3">Ranking</h2>
+      <div className="mb-4 flex items-center gap-2">
+        <button
+          onClick={() => setHideNewPlayers(!hideNewPlayers)}
+          className="px-3 py-1 rounded-md bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-sm font-medium transition-colors"
+        >
+          {hideNewPlayers ? "Mostrar" : "Ocultar"} jogadores com menos de 5
+          partidas
+        </button>
+      </div>
       <div className="overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
         <table className="w-full">
           <thead>
@@ -23,7 +39,7 @@ export function Leaderboard({ players }: LeaderboardProps) {
             </tr>
           </thead>
           <tbody>
-            {byRating.map((p) => (
+            {filteredPlayers.map((p) => (
               <tr
                 key={p.profile}
                 className="border-t border-slate-200 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800/"
