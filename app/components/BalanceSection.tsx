@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react"
 import type { BalancedTeams, Player } from "@/app/types"
 import { BalancedTeam } from "./BalancedTeam"
 
@@ -14,6 +15,51 @@ export function BalanceSection({
   onTogglePlayer,
   balanced,
 }: BalanceSectionProps) {
+  const [copied, setCopied] = useState(false)
+
+  const message = useMemo(() => {
+    if (!balanced) return ""
+
+    const formatTeam = (title: string, players: Player[]) => {
+      const total = players.reduce((s, p) => s + p.rating, 0)
+
+      return [
+        title,
+        ...players.map(
+          (p, i) => `${i + 1}. ${p.name} (${p.rating.toFixed(0)})`,
+        ),
+        `Total: ${total.toFixed(0)}`,
+      ].join("\n")
+    }
+
+    const totalA = balanced.teamA.reduce((s, p) => s + p.rating, 0)
+    const totalB = balanced.teamB.reduce((s, p) => s + p.rating, 0)
+    const diff = Math.abs(totalA - totalB)
+
+    return [
+      "COMPOSIÇÃO DOS TIMES",
+      "--------------------------------",
+      "",
+      formatTeam("Time A", balanced.teamA),
+      "",
+      formatTeam("Time B", balanced.teamB),
+      "",
+      "--------------------------------",
+      `Diferença de força: ${diff.toFixed(0)}`,
+    ].join("\n")
+  }, [balanced])
+
+  const handleCopy = async () => {
+    if (!message) return
+
+    await navigator.clipboard.writeText(message)
+    setCopied(true)
+
+    setTimeout(() => {
+      setCopied(false)
+    }, 2000)
+  }
+
   return (
     <section>
       <h2 className="text-xl font-semibold mb-4">
@@ -58,24 +104,33 @@ export function BalanceSection({
       </div>
 
       {balanced && (
-        <div className="grid md:grid-cols-2 gap-6">
-          <BalancedTeam
-            title="Time A"
-            players={balanced.teamA}
-            otherTeamTotal={balanced.teamB.reduce(
-              (s, p) => s + p.rating,
-              0,
-            )}
-          />
-          <BalancedTeam
-            title="Time B"
-            players={balanced.teamB}
-            otherTeamTotal={balanced.teamA.reduce(
-              (s, p) => s + p.rating,
-              0,
-            )}
-          />
-        </div>
+        <>
+          <div className="mb-6">
+            <button
+              onClick={handleCopy}
+              className={`w-full px-6 py-3 rounded-lg font-semibold text-white transition-all shadow-md ${
+                copied
+                  ? "bg-emerald-500"
+                  : "bg-slate-800 hover:bg-slate-900 active:scale-95"
+              }`}
+            >
+              {copied ? "Copiado com sucesso" : "Copiar composição dos times"}
+            </button>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <BalancedTeam
+              title="Time A"
+              players={balanced.teamA}
+              otherTeamTotal={balanced.teamB.reduce((s, p) => s + p.rating, 0)}
+            />
+            <BalancedTeam
+              title="Time B"
+              players={balanced.teamB}
+              otherTeamTotal={balanced.teamA.reduce((s, p) => s + p.rating, 0)}
+            />
+          </div>
+        </>
       )}
     </section>
   )

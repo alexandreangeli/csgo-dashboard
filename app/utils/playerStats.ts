@@ -47,7 +47,7 @@ export function buildPlayers(rows: Row[], mode: "kd") {
   const KD_WEIGHT_RATING = 0.7
   const WR_WEIGHT = 0.3
 
-  const ASSIST_WEIGHT = 0.4
+  const ASSIST_WEIGHT = 0.5
 
   let players = Object.values(map).map((p: any) => {
     const winRate = p.matches > 0 ? p.wins / p.matches : 0
