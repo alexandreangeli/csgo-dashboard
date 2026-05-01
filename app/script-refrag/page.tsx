@@ -31,19 +31,80 @@ export default function ScriptPage() {
   return (
     <main className="min-h-screen bg-black p-6 text-white">
       <div className="mx-auto max-w-6xl">
+        <div className="mb-8">
+          <h1 className="mb-2 text-3xl font-bold">
+            Exportar Partida da Refrag
+          </h1>
+
+          <p className="text-zinc-400">
+            Siga o tutorial abaixo para exportar a partida em CSV.
+          </p>
+        </div>
+
+        <div className="mb-8 rounded-xl border border-zinc-800 bg-zinc-900 p-6">
+          <h2 className="mb-4 text-xl font-semibold">Tutorial</h2>
+
+          <ol className="space-y-4 text-zinc-300">
+            <li>
+              <span className="font-semibold text-white">1.</span> Abra o link
+              direto da partida da Refrag.
+            </li>
+
+            <li>
+              <span className="font-semibold text-white">2.</span> Exemplo:
+              <a
+                href="https://play.refrag.gg/matches/6f6693d0-1665-4aa2-811d-586f19b6c950"
+                className="mt-2 ml-2 rounded bg-black p-3 text-sm break-all text-green-400"
+              >
+                https://play.refrag.gg/matches/6f6693d0-1665-4aa2-811d-586f19b6c950
+              </a>
+            </li>
+
+            <li>
+              <span className="font-semibold text-white">3.</span> Com a partida
+              aberta na tela, copie o código abaixo clicando no botão{" "}
+              <span className="font-semibold text-white">"Copiar Script"</span>.
+            </li>
+
+            <li>
+              <span className="font-semibold text-white">4.</span> Abra o
+              console do navegador apertando{" "}
+              <span className="rounded bg-black px-2 py-1 text-sm text-green-400">
+                F12
+              </span>
+              .
+            </li>
+
+            <li>
+              <span className="font-semibold text-white">5.</span> Cole o script
+              no console do navegador e pressione Enter.
+            </li>
+
+            <li>
+              <span className="font-semibold text-white">6.</span> O arquivo CSV
+              será baixado automaticamente.
+            </li>
+
+            <li>
+              <span className="font-semibold text-white">7.</span> Envie o
+              arquivo CSV para o desenvolvedor do site.
+            </li>
+          </ol>
+        </div>
+
         <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Steam Match Export Script</h1>
+          <h2 className="text-2xl font-bold">Script</h2>
 
           <button
             onClick={copyScript}
-            className="rounded bg-white px-4 py-2 text-black"
+            className="rounded bg-white px-4 py-2 text-black transition-opacity hover:opacity-80 disabled:opacity-50"
             disabled={!scriptCode}
           >
-            {copied ? "Copied" : "Copy Script"}
+            {copied ? "Copiado" : "Copiar Script"}
           </button>
         </div>
 
-        <pre className="overflow-x-auto rounded bg-zinc-900 p-4 text-sm leading-6 whitespace-pre-wrap">
+        <pre className="overflow-x-auto rounded-xl border border-zinc-800 bg-zinc-900 p-4 text-sm leading-6 whitespace-pre-wrap">
           <code>{scriptCode}</code>
         </pre>
       </div>
