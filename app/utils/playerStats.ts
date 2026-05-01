@@ -8,7 +8,7 @@ export function normalizeName(name: string) {
     .replace(/[^a-z0-9]+/g, "")
 }
 
-export function buildPlayers(rows: Row[], mode: "kd") {
+export function buildPlayers(rows: Row[]) {
   const map: Record<string, any> = {}
 
   rows.forEach((r) => {
@@ -77,10 +77,8 @@ export function buildPlayers(rows: Row[], mode: "kd") {
 
     let perf = 0
 
-    if (mode === "kd") {
-      const cappedKD = Math.min(p.kdSmoothed, kdCap)
-      perf = cappedKD / kdCap
-    }
+    const cappedKD = Math.min(p.kdSmoothed, kdCap)
+    perf = cappedKD / kdCap
 
     const rawRating = KD_WEIGHT_RATING * perf + WR_WEIGHT * smoothedWR
 

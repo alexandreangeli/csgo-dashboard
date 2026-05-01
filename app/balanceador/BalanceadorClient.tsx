@@ -9,7 +9,7 @@ import { BalanceSection } from "@/app/components/BalanceSection"
 export function BalanceadorClient({ rows }: { rows: Row[] }) {
   const [selected, setSelected] = useState<string[]>([])
 
-  const players = buildPlayers(rows, "kd")
+  const players = buildPlayers(rows)
   const byRating = [...players].sort((a, b) => b.rating - a.rating)
   const selectedPlayers = players.filter((p) => selected.includes(p.profile))
 

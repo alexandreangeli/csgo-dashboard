@@ -14,7 +14,7 @@ export default async function PlayerDetailPage({
 }) {
   const { player: playerProfile } = await params
   const rows = loadAllCSVs("matches")
-  const players = buildPlayers(rows, "kd")
+  const players = buildPlayers(rows)
   const player = players.find((p) => p.profile === playerProfile)
 
   const headToHead = calculateHeadToHeadStats(playerProfile, rows)
