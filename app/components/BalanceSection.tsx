@@ -26,9 +26,7 @@ export function BalanceSection({
 
       return [
         title,
-        ...sorted.map(
-          (p, i) => `${i + 1}. ${p.name} (${p.rating.toFixed(0)})`,
-        ),
+        ...sorted.map((p, i) => `${i + 1}. ${p.name} (${p.rating.toFixed(0)})`),
         `Total: ${total.toFixed(0)}`,
       ].join("\n")
     }
