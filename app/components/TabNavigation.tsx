@@ -6,7 +6,7 @@ type TabNavigationProps = {
 }
 
 export function TabNavigation({ activeTab }: TabNavigationProps) {
-  const tabs: Array<{ name: TabType; href: string; icon: string }> = [
+  const tabs: Array<{ name: TabType; href: string }> = [
     { name: "Balanceador", href: "/balanceador" },
     { name: "Ranking", href: "/ranking" },
     { name: "Partidas", href: "/partidas" },
