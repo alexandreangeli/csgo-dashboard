@@ -10,7 +10,7 @@ type DashboardShellProps = {
 
 export function DashboardShell({ activeTab, children }: DashboardShellProps) {
   return (
-    <main className="max-w-6xl mx-auto p-6 font-sans">
+    <main className="max-w-6xl mx-auto font-sans">
       <Header />
       <TabNavigation activeTab={activeTab} />
       {children}

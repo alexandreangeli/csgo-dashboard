@@ -22,7 +22,7 @@ export default async function PlayerDetailPage({
 
   if (!player) {
     return (
-      <main className="max-w-6xl mx-auto p-6 font-sans">
+      <main className="max-w-6xl mx-auto font-sans">
         <div className="mb-4">
           <BackButton />
         </div>
@@ -34,7 +34,7 @@ export default async function PlayerDetailPage({
   }
 
   return (
-    <main className="max-w-6xl mx-auto p-6 font-sans">
+    <main className="max-w-6xl mx-auto font-sans">
       <div className="mb-6">
         <BackButton />
       </div>

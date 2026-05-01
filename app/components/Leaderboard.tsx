@@ -44,6 +44,9 @@ export function Leaderboard({ players }: LeaderboardProps) {
                 Win Rate
               </th>
               <th className="hidden sm:table-cell px-4 py-2 text-right">K/D</th>
+              <th className="hidden sm:table-cell px-4 py-2 text-right">
+                K/A/D
+              </th>
             </tr>
           </thead>
 
@@ -62,8 +65,8 @@ export function Leaderboard({ players }: LeaderboardProps) {
                   </Link>
 
                   <div className="sm:hidden text-xs text-muted mt-1">
-                    {p.matches} partidas • {(p.winRate * 100).toFixed(0)}% • K/D{" "}
-                    {p.kd.toFixed(2)}
+                    {p.matches} jogos • {(p.winRate * 100).toFixed(0)}% • K/D{" "}
+                    {p.kd.toFixed(2)} • K/A/D {p.kda.toFixed(2)}
                   </div>
                 </td>
 
@@ -81,6 +84,10 @@ export function Leaderboard({ players }: LeaderboardProps) {
 
                 <td className="hidden sm:table-cell px-4 py-3 text-right">
                   {p.kd.toFixed(2)}
+                </td>
+
+                <td className="hidden sm:table-cell px-4 py-3 text-right">
+                  {p.kda.toFixed(2)}
                 </td>
               </tr>
             ))}

@@ -44,8 +44,8 @@ export function buildPlayers(rows: Row[], mode: "kd") {
   const WR_BAYESIAN_PRIOR = 0.5
   const WR_BAYESIAN_WEIGHT = 5
 
-  const KD_WEIGHT_RATING = 0.7
-  const WR_WEIGHT = 0.3
+  const KD_WEIGHT_RATING = 0.725
+  const WR_WEIGHT = 0.275
 
   const ASSIST_WEIGHT = 0.5
 
