@@ -21,11 +21,12 @@ export function BalanceSection({
     if (!balanced) return ""
 
     const formatTeam = (title: string, players: Player[]) => {
-      const total = players.reduce((s, p) => s + p.rating, 0)
+      const sorted = [...players].sort((a, b) => b.rating - a.rating)
+      const total = sorted.reduce((s, p) => s + p.rating, 0)
 
       return [
         title,
-        ...players.map(
+        ...sorted.map(
           (p, i) => `${i + 1}. ${p.name} (${p.rating.toFixed(0)})`,
         ),
         `Total: ${total.toFixed(0)}`,
